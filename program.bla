@@ -1,0 +1,13 @@
+function successor(n) = n + 1;
+// let successor = 5;            // ERROR: read only
+function successor(n) = n + 1;
+// let successor = 5;            // ERROR: read only
+let x = 3;
+// let x = 5;               // ERROR: x already declared
+// function x() = 0;        // ERROR: x already declared
+// function g(a, a) = 0;    // ERROR: a already declared
+function h(x) = 0;          // OK! parameter x shadows global x
+// let h = 3;               // ERROR: h already declared (prev line)
+function j(k) = 100 - x;    // OK
+let k = 2;                  // OK! Parameter k on prev line not in scope
+@
