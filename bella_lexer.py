@@ -6,25 +6,25 @@ import re
 class Lexer:
     token_type_patterns = {
         "WHITESPACE":"^[\\s\\t\\n\\r]",
-        "COMMENT":"^\\/\\/.*\\n",
-        "LET":"^let",
-        "FUNCTION":"^function",
-        "WHILE":"^while",
+        "COMMENT":"^\\/\\/.*;",
+        "KEYWORD":"^(let|function|while|true|false|if|else)",
+        "BUILTIN_FUNCTION":"^(print|free)",
         "PARENTHESIS":"^(\\(|\\))",
         "CURLY_BRACE":"^(\\{|\\})",
         "SEMICOLON":"^;",
         "COMMA":"^,",
-        # "OPERATOR":"^(\\+|\\-|\\*|\\/|\\%|\\*\\*|\\=|\\|\\||\\&\\&|\\!|\\?|\\:|\\<|\\<\\=|\\>|\\>\\=|\\=\\=|\\!\\=)",
-        "OPERATOR":"^(\\-|\\!|\\?|\\:)",
+        "FLOAT":"^\\-?\\d+((\\.\\d+)((E|e)(\\+|\\-)?\\d+)?)",
+        "INT":"^\\d+",
+        "ID":"^[a-zA-Z]([a-zA-Z0-9]|\\_)*",
+        "OPERATOR":"^(\\?|\\:)",
         "OPERATOR1":"^(\\|\\|)",
         "OPERATOR2":"^(\\&\\&)",
-        "OPERATOR3":"^(\\<\\=|\\<||\\=\\=|\\!\\=|\\>\\=|\\>)",
+        "OPERATOR3":"^(\\<\\=|\\<|\\=\\=|\\!\\=|\\>\\=|\\>)",
         "OPERATOR4":"^(\\+|\\-)",
-        "OPERATOR5":"^(\\*|\\/|\\%)",
         "OPERATOR6":"^(\\*\\*)",
-        "FLOAT":"^\\d+((\\.\\d+)|((E|e)(\\+|\\-)?\\d+))",
-        "INT":"^\\d+",
-        "ID":"^[a-zA-Z]([a-zA-Z]|\\d|\\_)*",
+        "OPERATOR5":"^(\\*|\\/|\\%)",
+        "NOT_OPERATOR":"^\\!",
+        "ASSIGN":"^(\\=)",
     }
 
     def __init__(self, input):
@@ -43,6 +43,10 @@ class Lexer:
                 match = re.search(regex, remaining_input)
                 if match:
                     token = bella_token.Token(token_type, match.group())
+                    if token.type == "INTEGER":
+                        token.value = int(token.value)
+                    if token.type == "FLOAT":
+                        token.value = float(token.value)
                     if token.type != "WHITESPACE":
                         self.tokens.append(token)
                     self.position += len(match.group())

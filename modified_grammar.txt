@@ -1,0 +1,52 @@
+Bella {
+  Program   = Statement Program'
+  Program'  = Statement Program'
+            | ""
+  Statement = let id "=" Exp ";"                            -- vardec
+            | function id Params "=" Exp ";"                -- fundec
+            | Exp7_id "=" Exp ";"                           -- assign
+            | print Exp ";"                                 -- print
+            | while Exp Block                               -- while
+  Params    = "(" ListOf<id, ","> ")"
+  Block     = "{" Statement* "}"
+
+  Exp       = ("-" | "!") Exp7                              -- unary
+            | Exp1 "?" Exp1 ":" Exp                         -- ternary
+            | Exp1
+  Exp1      = Exp1'Exp2                                     -- binary
+  Exp1'     = Exp1 "||"_
+            | ""
+  Exp2      = Exp2'Exp3                                     -- binary
+  Exp2'     = Exp2 "&&"_
+            | ""
+  Exp3      = Exp4 ("<="|"<"|"=="|"!="|">="|">") Exp4       -- binary
+            | Exp4
+  Exp4      = Exp4'Exp5                                     -- binary
+  Exp4'     = Exp4 ("+" | "-")_
+            | ""
+  Exp5      = Exp5'Exp6                                     -- binary
+  Exp5'     = Exp5 ("*" | "/" | "%")_
+            | ""
+  Exp6      = Exp7 "**" Exp6                                -- binary
+            | Exp7
+  Exp7      = num
+            | true
+            | false
+            | Call                                          -- call
+            | id                                            -- id
+            | "(" Exp ")"                                   -- parens
+
+  Call      = id "(" ListOf<Exp, ","> ")"
+
+  let       = "let" ~idchar
+  function  = "function" ~idchar
+  while     = "while" ~idchar
+  true      = "true" ~idchar
+  false     = "false" ~idchar
+  print     = "print" ~idchar
+  keyword   = let | function | while | true | false
+  num       = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
+  id        = ~keyword letter idchar*
+  idchar    = letter | digit | "_"
+  space    += "//" (~"\n" any)*                             -- comment
+}

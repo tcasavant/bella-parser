@@ -1,1 +1,41 @@
-1.2
+let ptr1 = alloc();
+let a = 1 + 2;
+
+let b = -(3 * 4);
+function foo(x, y) = x + (y);
+
+let s = foo(a, b) + b * 7 / (5 - (a ** 3));
+
+let c = false;
+let d = (c && false && (b >= a) || a >= b);
+
+while (d || c != false)
+{
+    let ptr1 = alloc();
+    let ptr2 = alloc();
+    let r = ptr1 + ptr2;
+
+    let s = -4.2e-2;
+    
+    let t = 2.1;
+    if c == true
+    {
+        print a % 10;
+    }
+
+    if c != d
+    {
+        print false;
+    }
+    else
+    {
+        let z = s < t ? c : d;
+        print !z;
+    }
+    let c = !c;
+
+    free(ptr1);
+    free(ptr2);
+}
+
+free(ptr1);
